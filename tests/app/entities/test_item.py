@@ -7,7 +7,7 @@ from src.app.errors.entity_errors import ParamNotValidated
 class Test_Item:
     def test_item(self):
         item = Item("test", 1.0, ItemTypeEnum.FOOD, admin_permission=True)
-        assert item.name == "test"
+        assert item.name == "teste"
         assert item.price == 1.0
         assert item.item_type == ItemTypeEnum.FOOD
         
