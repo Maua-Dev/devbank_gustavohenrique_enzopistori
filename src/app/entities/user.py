@@ -76,6 +76,19 @@ class User:
               #r=raw(ignora caracter de escape), \d=digitos 0-9, {5} indica que o caracter anterior(\d) deve ocorrer 5 vezes
               # - corresponde ao hifen literalmente
 
+    @staticmethod
+    def validate_user_id(user_id: int) -> Tuple[bool, str]:
+        if user_id is None:
+            return (False, "Missing 'user_id' parameter")
+
+        if type(user_id) != int:
+            return (False, "Parameter 'user_id' must be an integer")
+        
+        if user_id < 0:
+            return (False, "Parameter 'user_id' must be a positive integer")
+
+        return (True, "")
+
     def to_dict(self):
         return {
             "name": self.name,

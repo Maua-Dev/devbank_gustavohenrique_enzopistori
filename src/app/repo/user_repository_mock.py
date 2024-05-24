@@ -18,16 +18,16 @@ class userRepositoryMock(IUserRepository):
     def get_all_users(self) -> List[User]:
         return self.users.values()
     
-    def get_user(self, item_id: int) -> Optional[User]:
-        return self.users.get(item_id, None)
+    def get_user(self, user_id: int) -> Optional[User]:
+        return self.users.get(user_id, None)
     
-    def create_user(self, item: User, item_id: int) -> User:
+    def create_user(self, item: User, user_id: int) -> User:
         
-        self.items[item_id] = item
+        self.items[user_id] = item
         return item
     
-    def delete_user(self, item_id: int) -> User:
-        item = self.items.pop(item_id, None)
+    def delete_user(self, user_id: int) -> User:
+        item = self.items.pop(user_id, None)
         return item
         
         

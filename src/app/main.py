@@ -27,12 +27,30 @@ def get_all_users():
     return {
         "users": [user.to_dict() for user in users]
     }
+
+@app.get("/user/{user_id}")
+def get_user(user_id: int):
+    validation_user_id = User.validate_user_id(user_id=user_id)
+    if not validation_user_id[0]:
+        raise HTTPException(status_code=400, detail=validation_user_id[1])
+    
+    user = repo_user.get_user(user_id)
+    
+    if user is None:
+        raise HTTPException(status_code=404, detail="user Not found")
+    
+    return {
+        "user_id": user_id,
+        "user": user.to_dict()    
+    }
+
 @app.get("/items/get_all_items")
 def get_all_items():
     items = repo.get_all_items()
     return {
         "items": [item.to_dict() for item in items]
     }
+
 
 @app.get("/items/{item_id}")
 def get_item(item_id: int):
