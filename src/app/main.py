@@ -2,20 +2,31 @@ from fastapi import FastAPI, HTTPException
 from mangum import Mangum
 
 from .environments import Environments
+from .environments import Environments2
 
 from .repo.item_repository_mock import ItemRepositoryMock
+from .repo.user_repository_mock import userRepositoryMock
 
 from .errors.entity_errors import ParamNotValidated
 
 from .enums.item_type_enum import ItemTypeEnum
 
 from .entities.item import Item
+from .entities.user import User
 
+from.repo.user_repository_interface import IUserRepository
 
 app = FastAPI()
 
 repo = Environments.get_item_repo()()
+repo_user = Environments2.get_user_repo()()
 
+@app.get("/user/get_all_users")
+def get_all_users():
+    users = repo_user.get_all_users()
+    return {
+        "users": [user.to_dict() for user in users]
+    }
 @app.get("/items/get_all_items")
 def get_all_items():
     items = repo.get_all_items()

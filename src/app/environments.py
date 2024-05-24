@@ -1,11 +1,11 @@
-
+from dotenv import load_dotenv
 from enum import Enum
 import os
 
 from .errors.environment_errors import EnvironmentNotFound
 
 from .repo.item_repository_interface import IItemRepository
-
+from .repo.user_repository_interface import IUserRepository
 
 class STAGE(Enum):
     DOTENV = "DOTENV"
@@ -41,8 +41,7 @@ class Environments:
             return ItemRepositoryMock
         # use "elif" conditional to add other stages
         else:
-            raise EnvironmentNotFound("STAGE")
-        
+            raise EnvironmentNotFound("STAGE")  
 
     @staticmethod
     def get_envs() -> "Environments":
@@ -57,3 +56,37 @@ class Environments:
 
     def __repr__(self):
         return self.__dict__
+    
+
+class Environments2:
+    """
+    Handles environment-specific configurations for user setups.
+    """
+
+    def __init__(self):
+        self.configure_local()
+
+    def configure_local(self):
+        """
+        Loads environment variables from a.env file or sets default values.
+        """
+        load_dotenv()
+        self.user_repo_path = os.getenv('USER_REPO_PATH', 'path/to/default/user/repository')
+
+    def get_user_repo() -> IUserRepository:
+        """
+        Returns the path to the user repository based on the environment.
+        """
+        from .repo.user_repository_mock import userRepositoryMock
+        return userRepositoryMock
+
+    def get_envs() -> "Environments2":
+        """
+        Returns the Environments2 object configured for the current environment.
+        """
+        envs = Environments2()
+        envs.configure_local()
+        return envs
+
+    def __repr__(self):
+        return f"user_repo_path: {self.user_repo_path}"

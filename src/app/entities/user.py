@@ -40,7 +40,7 @@ class User:
              return(False, "Agency must be int")
         if agency < 0:
              return(False, "Agency must be a positive number")
-        if 1000 <= agency <= 9999:
+        if 1 <= agency <= 9999:
              return (True, "")
     
     @staticmethod
@@ -75,3 +75,11 @@ class User:
            #re.match é uma função para fazer comparação entre strings,
               #r=raw(ignora caracter de escape), \d=digitos 0-9, {5} indica que o caracter anterior(\d) deve ocorrer 5 vezes
               # - corresponde ao hifen literalmente
+
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "agency": self.agency,
+            "account": self.account,
+            "current_balance": self.current_balance
+        }
