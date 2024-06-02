@@ -5,7 +5,23 @@ from src.app.enums.item_type_enum import ItemTypeEnum
 from src.app.main import get_all_items, get_item, create_item, delete_item, update_item
 from src.app.repo.item_repository_mock import ItemRepositoryMock
 
+from src.app.main import create_deposit
+
 class Test_Main:
+    def testecriacaodeposit(self):
+        repo=ItemRepositoryMock()
+        response=create_deposit(request={
+            "2": 2,
+            "5": 4,
+            "10": 1,
+            "20": 3,
+            "50": 0,
+            "100": 2,
+            "200": 0
+        })
+        totalesperado = 294 + repo.get_client(1).saldo_atual
+        assert totalesperado == response.get("saldoNaHora")
+
     def test_get_all_items(self):
         repo = ItemRepositoryMock()
         response = get_all_items()

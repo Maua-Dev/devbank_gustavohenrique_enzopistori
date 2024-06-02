@@ -10,16 +10,24 @@ from .repo.user_repository_mock import userRepositoryMock
 from .errors.entity_errors import ParamNotValidated
 
 from .enums.item_type_enum import ItemTypeEnum
+from .enums.item_type_enum import TransacTypeEnum
 
 from .entities.item import Item
 from .entities.user import User
+from .entities.transaction import Transaction
 
 from.repo.user_repository_interface import IUserRepository
+
+from datetime import datetime
+import time
 
 app = FastAPI()
 
 repo = Environments.get_item_repo()()
-repo_user = Environments2.get_user_repo()()
+repo_user = Environments.get_user_repo()()
+repo_tran = Environments.get_tran_repo()()
+
+clientDefault = repo_user.get_user(1)
 
 @app.get("/user/get_all_users")
 def get_all_users():
@@ -43,6 +51,54 @@ def get_user(user_id: int):
         "user_id": user_id,
         "user": user.to_dict()    
     }
+
+@app.post("/deposit", status_code=201)
+def create_deposit(request: dict):
+
+    mascara = {
+        "2": 0,
+        "5": 0,
+        "10": 0,
+        "20": 0,
+        "50": 0,
+        "100": 0,
+        "200": 0
+    }
+
+    quantia = 0.0
+
+    for chave in request:
+        if mascara.get(chave, None) is not None:
+            quantia += float(chave) * float(request[chave])
+
+    if quantia > clientDefault.saldo_atual*2:
+        raise HTTPException(status_code=403, detail="Saldo suspeito")
+
+    clientDefault.saldo_atual += quantia
+
+    transacao = Transaction(saldoNaHora=clientDefault.saldo_atual, hora=time.time(), quantia=quantia, tipo=TransacTypeEnum.DEPOSIT)
+
+    repo_tran.cria_transacao(transac=transacao, transac_id=int((transacao.saldoNaHora * transacao.quantia) / 1000))
+
+    return {
+        "hora":time.time(),
+        "saldoNaHora": clientDefault.saldo_atual
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.get("/items/get_all_items")
 def get_all_items():

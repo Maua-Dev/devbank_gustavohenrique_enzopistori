@@ -21,6 +21,7 @@ class userRepositoryMock(IUserRepository):
     def get_user(self, user_id: int) -> Optional[User]:
         return self.users.get(user_id, None)
     
+    '''
     def create_user(self, item: User, user_id: int) -> User:
         
         self.items[user_id] = item
@@ -47,6 +48,6 @@ class userRepositoryMock(IUserRepository):
         self.items[user_id] = item
         
         return item
-        
+    '''
     
     

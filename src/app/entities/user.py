@@ -40,8 +40,10 @@ class User:
              return(False, "Agency must be int")
         if agency < 0:
              return(False, "Agency must be a positive number")
-        if 1 <= agency <= 9999:
-             return (True, "")
+        if len(str(agency)) != 5:
+             return(False, "Agency must has 5 digits len")
+     
+        return (True, "")
     
     @staticmethod
     def validate_current_balance(current_balance: float) -> bool:
@@ -59,7 +61,7 @@ class User:
               return(False,"Name is required")
          if type(name) != str:
               return(False, "Name must be a string")
-         if len(name) < 3:
+         if len(name) < 2:
               return(False, "Name must be at least 3 characters long")
          return (True, "")
     

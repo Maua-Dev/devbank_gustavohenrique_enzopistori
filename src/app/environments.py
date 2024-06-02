@@ -53,7 +53,23 @@ class Environments:
         envs = Environments()
         envs.load_envs()
         return envs
+    
+    @staticmethod
+    def get_tran_repo() -> IItemRepository:
+        if Environments.get_envs().stage == STAGE.TEST:
+            from .repo.transaction_repository_mock import TransacRepositoriMock
+            return TransacRepositoriMock
+        else:
+            raise EnvironmentNotFound("STAGE")
 
+    @staticmethod
+    def get_user_repo() -> IUserRepository:
+        if Environments.get_envs().stage == STAGE.TEST:
+            from .repo.user_repository_mock import userRepositoryMock
+            return userRepositoryMock
+        else:
+            raise EnvironmentNotFound("STAGE")
+        
     def __repr__(self):
         return self.__dict__
     

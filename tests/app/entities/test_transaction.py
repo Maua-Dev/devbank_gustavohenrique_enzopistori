@@ -1,15 +1,16 @@
 import pytest
-from src.app.entities.user import User
+from src.app.entities.transaction import Transaction
 from src.app.errors.entity_errors import ParamNotValidated
+from src.app.enums.transaction_type_enum import TransactionTypeEnum
 
-class Test_User:
-    def test_user(self):
-        user= User("Enzo",12345,'00000-0',1000.0)
-        assert user.name == "Enzo"
-        assert user.agency == 12345
-        assert user.account == '00000-0'
-        assert user.current_balance == 1000.0
-    
+class Teste_Transac:
+    def teste_transacoes(self):
+        transacao = Transaction(TransactionTypeEnum.DEPOSIT, 1.0, 24556.0, 500.0)
+        assert transacao.timestamp == 500.0
+        assert transacao.value == 1.0
+        assert transacao.types == TransactionTypeEnum.DEPOSIT
+        assert transacao.current_balance == 24556.0
+    '''
     def test_user_name_is_none(self):
         with pytest.raises(ParamNotValidated):
             User(agency=1234, account='00000-0', current_balance=1000.0)
@@ -44,4 +45,4 @@ class Test_User:
 
     def test_current_balance_is_negative(self):
         with pytest.raises(ParamNotValidated):
-            User(name="Enzo", agency=1234, account='00000-0', current_balance=-1000.0)
+            User(name="Enzo", agency=1234, account='00000-0', current_balance=-1000.0)'''

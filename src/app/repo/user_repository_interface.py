@@ -24,6 +24,7 @@ class IUserRepository(ABC):
         '''
         pass
     
+    """
     @abstractmethod
     def create_user(self, item: User, item_id: int) -> User:
         '''
@@ -45,5 +46,5 @@ class IUserRepository(ABC):
         If the item does not exist, returns None
         '''
         pass
-    
+    """
     
