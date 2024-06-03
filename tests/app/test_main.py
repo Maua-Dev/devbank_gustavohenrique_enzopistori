@@ -1,15 +1,16 @@
 from fastapi.exceptions import HTTPException
 import pytest
 from src.app.entities.item import Item
-#from src.app.enums.item_type_enum import ItemTypeEnum
+from src.app.enums.item_type_enum import ItemTypeEnum
 from src.app.main import get_all_items, get_item, create_item, delete_item, update_item
+from src.app.repo.user_repository_mock import userRepositoryMock
 from src.app.repo.item_repository_mock import ItemRepositoryMock
 
 from src.app.main import create_deposit
 
 class Test_Main:
     def testecriacaodeposit(self):
-        repo=ItemRepositoryMock()
+        repo=userRepositoryMock()
         response=create_deposit(request={
             "2": 2,
             "5": 4,
@@ -19,8 +20,8 @@ class Test_Main:
             "100": 2,
             "200": 0
         })
-        totalesperado = 294 + repo.get_client(1).saldo_atual
-        assert totalesperado == response.get("saldoNaHora")
+        totalesperado = 294 + repo.get_user(1).current_balance
+        assert totalesperado == response.get("current_balance")
 
     def test_get_all_items(self):
         repo = ItemRepositoryMock()

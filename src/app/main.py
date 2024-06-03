@@ -10,7 +10,7 @@ from .repo.user_repository_mock import userRepositoryMock
 from .errors.entity_errors import ParamNotValidated
 
 from .enums.item_type_enum import ItemTypeEnum
-from .enums.item_type_enum import TransacTypeEnum
+from .enums.transaction_type_enum import TransactionTypeEnum
 
 from .entities.item import Item
 from .entities.user import User
@@ -65,24 +65,24 @@ def create_deposit(request: dict):
         "200": 0
     }
 
-    quantia = 0.0
+    value = 0.0
 
     for chave in request:
         if mascara.get(chave, None) is not None:
-            quantia += float(chave) * float(request[chave])
+            value += float(chave) * float(request[chave])
 
-    if quantia > clientDefault.saldo_atual*2:
+    if value > clientDefault.current_balance*2:
         raise HTTPException(status_code=403, detail="Saldo suspeito")
 
-    clientDefault.saldo_atual += quantia
+    clientDefault.current_balance += value
 
-    transacao = Transaction(saldoNaHora=clientDefault.saldo_atual, hora=time.time(), quantia=quantia, tipo=TransacTypeEnum.DEPOSIT)
+    transacao = Transaction(types=TransactionTypeEnum.DEPOSIT, value=value, current_balance=clientDefault.current_balance, timestamp=time.time() )
 
-    repo_tran.cria_transacao(transac=transacao, transac_id=int((transacao.saldoNaHora * transacao.quantia) / 1000))
+    repo_tran.cria_transacao(transac=transacao, transac_id=int((transacao.current_balance * transacao.value) / 1000))
 
     return {
-        "hora":time.time(),
-        "saldoNaHora": clientDefault.saldo_atual
+        "timeStamp":time.time(),
+        "current_balance": clientDefault.current_balance
     }
 
 

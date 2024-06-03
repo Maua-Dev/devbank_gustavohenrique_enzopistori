@@ -10,9 +10,9 @@ class userRepositoryMock(IUserRepository):
     
     def __init__(self):
         self.users = {
-            1: User(name="GustavoHenrique", agency=1588, account='12345-6', current_balance=99.65),
-            2: User(name="EnzoPistori", agency=132, account='12345-6', current_balance=654.11),
-            3: User(name="Geraldo", agency=2295, account='12345-6', current_balance=1002.90),
+            1: User(name="GustavoHenrique", agency=15848, account='12345-6', current_balance=250.60),
+            2: User(name="EnzoPistori", agency=13245, account='12345-6', current_balance=654.11),
+            3: User(name="Geraldo", agency=42295, account='12345-6', current_balance=1002.90),
         }
         
     def get_all_users(self) -> List[User]:
