@@ -86,6 +86,39 @@ def create_deposit(request: dict):
     }
 
 
+@app.post("/withdraw", status_code=201)
+def create_withdraw(request: dict):
+
+    mascara = {
+        "2": 0,
+        "5": 0,
+        "10": 0,
+        "20": 0,
+        "50": 0,
+        "100": 0,
+        "200": 0
+    }
+
+    value = 0.0
+
+    for chave in request:
+        if mascara.get(chave, None) is not None:
+            value += float(chave) * float(request[chave])
+
+    if value > clientDefault.current_balance:
+        raise HTTPException(status_code=403, detail="Saldo insuficiente")
+
+    clientDefault.current_balance -= value
+
+    transacao = Transaction(types=TransactionTypeEnum.WITHWDRAW, value=value, current_balance=clientDefault.current_balance, timestamp=time.time())
+
+    repo_tran.cria_transacao(transac=transacao, transac_id=int((transacao.current_balance * transacao.value) / 1000))
+
+    return {
+        "timeStamp":time.time(),
+        "current_balance": clientDefault.current_balance
+    }
+
 
 
 

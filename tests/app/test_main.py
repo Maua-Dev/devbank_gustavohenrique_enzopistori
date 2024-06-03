@@ -6,7 +6,7 @@ from src.app.main import get_all_items, get_item, create_item, delete_item, upda
 from src.app.repo.user_repository_mock import userRepositoryMock
 from src.app.repo.item_repository_mock import ItemRepositoryMock
 
-from src.app.main import create_deposit
+from src.app.main import create_deposit, create_withdraw
 
 class Test_Main:
     def testecriacaodeposit(self):
@@ -21,6 +21,20 @@ class Test_Main:
             "200": 0
         })
         totalesperado = 294 + repo.get_user(1).current_balance
+        assert totalesperado == response.get("current_balance")
+
+    def testecriacaowithdraw(self):
+        repo=userRepositoryMock()
+        response=create_withdraw(request={
+            "2": 2,
+            "5": 4,
+            "10": 1,
+            "20": 3,
+            "50": 1,
+            "100": 2,
+            "200": 0
+        })
+        totalesperado = repo.get_user(1).current_balance + 294 - (294+50)
         assert totalesperado == response.get("current_balance")
 
     def test_get_all_items(self):
