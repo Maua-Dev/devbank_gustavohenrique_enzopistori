@@ -119,6 +119,12 @@ def create_withdraw(request: dict):
         "current_balance": clientDefault.current_balance
     }
 
+@app.get ("/history", status_code=201)
+def get_history():
+    transacoes = repo_tran.get_all_transactions()
+    return {
+        "all_transactions": [transacao.to_dict() for transacao in transacoes]
+    }
 
 
 

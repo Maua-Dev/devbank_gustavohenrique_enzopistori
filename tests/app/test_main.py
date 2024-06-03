@@ -1,3 +1,4 @@
+import fastapi.exceptions
 from fastapi.exceptions import HTTPException
 import pytest
 from src.app.entities.item import Item
@@ -36,6 +37,20 @@ class Test_Main:
         })
         totalesperado = repo.get_user(1).current_balance + 294 - (294+50)
         assert totalesperado == response.get("current_balance")
+
+    def teste_saldo_insuficiente(self):
+        with pytest.raises(fastapi.exceptions.HTTPException) as exc_info:
+            response =create_withdraw(request={
+                "2": 2,
+                "5": 4,
+                "10": 1,
+                "20": 3,
+                "50": 30,
+                "100": 10,
+                "200": 40
+            })
+        assert exc_info.value.status_code == 403
+        assert exc_info.value.detail == "Saldo insuficiente"
 
     def test_get_all_items(self):
         repo = ItemRepositoryMock()
